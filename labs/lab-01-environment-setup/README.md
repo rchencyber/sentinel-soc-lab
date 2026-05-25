@@ -17,4 +17,4 @@ communicating on a private internal network called "soclab".
 ## Outcome
 Verified bidirectional connectivity with 0% packet loss ping test.
 
-📄 [View Full Lab Write-Up](./Lab_01_SOC_Home_Lab_Environment_Setup.pdf)
+📄 [View Full Lab Write-Up](Lab 01 — SOC Home Lab Environment Setup _ Sentinel AI.pdf)
