@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Lab Series</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black: #0a0a0a;
+  --white: #f5f2ee;
+  --orange: #ff4d00;
+  --orange2: #ff7a33;
+  --grey: #8a8a8a;
+  --grey-light: #e8e4df;
+  --panel: #111111;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--orange);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,77,0,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+}
+body:has(a:hover) .cursor { width: 16px; height: 16px; }
+body:has(a:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--orange); }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 4px;
+  color: var(--white);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 40px; align-items: center; }
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: 2px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.nav-links a:hover { opacity: 1; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 0 80px 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  letter-spacing: 4px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--orange);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 10vw, 160px);
+  line-height: 0.9;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 40px;
+}
+
+.hero-title .outline {
+  -webkit-text-stroke: 1px var(--white);
+  color: transparent;
+}
+
+.hero-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(245,242,238,0.6);
+  line-height: 1.8;
+  max-width: 400px;
+  margin-bottom: 48px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.btn-main {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  padding: 16px 40px;
+  background: var(--orange);
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: inline-block;
+}
+.btn-main:hover {
+  background: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(255,77,0,0.3);
+}
+
+.btn-ghost {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgba(245,242,238,0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ghost:hover { color: var(--white); }
+.btn-ghost::after { content: '↗'; }
+
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute;
+  top: 50%; right: -40px;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-size: 280px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,77,0,0.12);
+  letter-spacing: -10px;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: drift 8s ease-in-out infinite alternate;
+}
+
+@keyframes drift { from { transform: translateY(-48%) } to { transform: translateY(-52%) } }
+
+.hero-stats {
+  position: absolute;
+  bottom: 80px; right: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 2;
+}
+
+.hero-stat {
+  text-align: right;
+}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 52px;
+  color: var(--white);
+  line-height: 1;
+}
+.hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--grey);
+  letter-spacing: 3px;
+  margin-top: 4px;
+}
+
+.hero-line {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,77,0,0.3) 30%, rgba(255,77,0,0.3) 70%, transparent);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--grey);
+  letter-spacing: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--orange), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+/* WARNING */
+.warning {
+  background: rgba(255,77,0,0.08);
+  border-top: 1px solid rgba(255,77,0,0.2);
+  border-bottom: 1px solid rgba(255,77,0,0.2);
+  padding: 16px 48px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255,77,0,0.8);
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* SECTION BASE */
+.section {
+  padding: 120px 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(245,242,238,0.1);
+}
+
+.section-num {
+  font-family: var(--font-display);
+  font-size: 120px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245,242,238,0.06);
+  line-height: 1;
+  margin-right: 24px;
+}
+
+.section-title-group { flex: 1; }
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 72px);
+  letter-spacing: 3px;
+  line-height: 1;
+  color: var(--white);
+}
+
+.section-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--grey);
+  letter-spacing: 2px;
+  text-align: right;
+}
+
+/* ARCH SECTION */
+.arch-section {
+  background: var(--panel);
+  padding: 0;
+  border-top: 1px solid rgba(245,242,238,0.06);
+  border-bottom: 1px solid rgba(245,242,238,0.06);
+}
+
+.arch-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 48px;
+}
+
+.arch-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.arch-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(245,242,238,0.06);
+  transition: background 0.2s;
+}
+.arch-row:last-child { border-bottom: none; }
+.arch-row:hover { background: rgba(255,77,0,0.03); }
+
+.arch-index {
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245,242,238,0.15);
+  line-height: 1;
+}
+
+.arch-info { }
+.arch-name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.arch-detail {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--grey);
+  letter-spacing: 1px;
+}
+
+.arch-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  padding: 6px 16px;
+  border: 1px solid;
+}
+.badge-attack { color: #ff3860; border-color: rgba(255,56,96,0.4); }
+.badge-victim { color: #00cfff; border-color: rgba(0,207,255,0.4); }
+.badge-target { color: #ff3860; border-color: rgba(255,56,96,0.4); }
+.badge-detect { color: #00cfff; border-color: rgba(0,207,255,0.4); }
+.badge-ai { color: #00ff88; border-color: rgba(0,255,136,0.4); }
+.badge-enterprise { color: #ffcc00; border-color: rgba(255,204,0,0.4); }
+
+/* LABS */
+.labs-section { padding: 120px 0; }
+.labs-header {
+  padding: 0 48px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.labs-strip {
+  display: flex;
+  flex-direction: column;
+}
+
+.lab-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr auto;
+  align-items: center;
+  gap: 40px;
+  padding: 32px 48px;
+  border-top: 1px solid rgba(245,242,238,0.06);
+  transition: all 0.3s;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+.lab-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: rgba(255,77,0,0.04);
+  transition: width 0.4s ease;
+}
+.lab-row:hover::before { width: 100%; }
+.lab-row:hover { border-color: rgba(255,77,0,0.3); }
+.lab-row:last-child { border-bottom: 1px solid rgba(245,242,238,0.06); }
+
+.lab-row.complete { }
+.lab-row.complete .lab-row-num { color: var(--orange); -webkit-text-stroke: 0; }
+
+.lab-row-num {
+  font-family: var(--font-display);
+  font-size: 56px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245,242,238,0.2);
+  line-height: 1;
+  transition: color 0.3s, -webkit-text-stroke 0.3s;
+}
+.lab-row:hover .lab-row-num {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--orange);
+}
+
+.lab-row-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--white);
+}
+
+.lab-row-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+.lab-row-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  padding: 6px 16px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.s-done { color: var(--orange); border-color: rgba(255,77,0,0.5); }
+.s-next { color: #ffcc00; border-color: rgba(255,204,0,0.4); }
+.s-soon { color: var(--grey); border-color: rgba(138,138,138,0.3); }
+.s-cap { color: #00ff88; border-color: rgba(0,255,136,0.4); }
+
+/* STACK */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid rgba(245,242,238,0.06);
+  border-left: 1px solid rgba(245,242,238,0.06);
+}
+.stack-item {
+  padding: 40px 32px;
+  border-right: 1px solid rgba(245,242,238,0.06);
+  border-bottom: 1px solid rgba(245,242,238,0.06);
+  transition: background 0.2s;
+}
+.stack-item:hover { background: rgba(255,77,0,0.04); }
+.stack-icon { font-size: 32px; margin-bottom: 20px; }
+.stack-cat {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--orange);
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+.stack-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.stack-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+/* REQUIREMENTS */
+.req-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.req-item {
+  background: var(--panel);
+  padding: 48px 40px;
+  transition: background 0.2s;
+}
+.req-item:hover { background: #181818; }
+.req-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--grey);
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+}
+.req-val {
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.req-val span { color: var(--orange); }
+.req-note {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--grey);
+}
+
+/* FORMAT SECTION */
+.format-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.format-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 32px 40px;
+  background: var(--panel);
+  transition: background 0.2s;
+}
+.format-item:hover { background: #181818; }
+.format-num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,77,0,0.4);
+  line-height: 1;
+  min-width: 48px;
+}
+.format-text { }
+.format-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.format-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+/* CTA */
+.cta {
+  padding: 160px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(245,242,238,0.06);
+}
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-display);
+  font-size: 300px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,77,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  letter-spacing: -20px;
+  line-height: 1;
+}
+.cta-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--orange);
+  letter-spacing: 4px;
+  margin-bottom: 24px;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 120px);
+  letter-spacing: 4px;
+  color: var(--white);
+  line-height: 0.95;
+  margin-bottom: 48px;
+}
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  position: relative;
+}
+
+/* FOOTER */
+footer {
+  padding: 32px 48px;
+  border-top: 1px solid rgba(245,242,238,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--grey);
+  letter-spacing: 2px;
+}
+footer a { color: var(--orange); text-decoration: none; }
+
+/* REVEAL ANIMATIONS */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.up { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-left.up { opacity: 1; transform: translateX(0); }
+
+/* RESPONSIVE — TABLET */
+@media (max-width: 1024px) {
+  .stack-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { font-size: clamp(60px, 12vw, 120px); }
+}
+
+/* RESPONSIVE — MOBILE */
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 18px 20px; }
+  .nav-links { display: none; }
+  .nav-logo { font-size: 18px; }
+
+  /* Hero */
+  .hero { grid-template-columns: 1fr; min-height: 100svh; }
+  .hero-right { display: none; }
+  .hero-left { padding: 100px 20px 80px; justify-content: flex-end; }
+  .hero-title { font-size: clamp(56px, 16vw, 100px); }
+  .hero-desc { font-size: 14px; max-width: 100%; }
+  .hero-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .btn-main { width: 100%; text-align: center; padding: 18px 24px; }
+  .scroll-hint { display: none; }
+
+  /* Sections */
+  .section { padding: 60px 20px; }
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .section-num { font-size: 72px; }
+  .section-title { font-size: clamp(28px, 8vw, 48px); }
+  .section-meta { text-align: left; }
+
+  /* Arch */
+  .arch-inner { padding: 60px 20px; }
+  .arch-row { grid-template-columns: 48px 1fr; gap: 16px; padding: 20px 0; }
+  .arch-index { font-size: 32px; }
+  .arch-name { font-size: 16px; }
+  .arch-detail { font-size: 11px; }
+  .arch-badge { display: none; }
+
+  /* Labs */
+  .labs-section { padding: 60px 0; }
+  .labs-header { padding: 0 20px 48px; }
+  .lab-row {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto auto;
+    padding: 20px;
+    gap: 12px 16px;
+  }
+  .lab-row-num { font-size: 40px; grid-row: 1 / 3; }
+  .lab-row-title { font-size: 16px; letter-spacing: 1px; align-self: end; }
+  .lab-row-desc {
+    display: block;
+    grid-column: 2;
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 1.5;
+  }
+  .lab-row-status {
+    display: none;
+  }
+  /* Show status as a small colored dot on title line */
+  .lab-row.complete .lab-row-title::before {
+    content: '● ';
+    color: var(--orange);
+    font-size: 10px;
+  }
+
+  /* Stack */
+  .stack-grid { grid-template-columns: 1fr; }
+  .stack-item { padding: 28px 20px; }
+
+  /* Requirements */
+  .req-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
+  .req-item { padding: 28px 20px; }
+  .req-val { font-size: 32px; }
+
+  /* Format */
+  .format-grid { grid-template-columns: 1fr; }
+  .format-item { padding: 24px 20px; }
+  .format-num { font-size: 28px; min-width: 40px; }
+
+  /* CTA */
+  .cta { padding: 100px 20px; }
+  .cta-title { font-size: clamp(48px, 14vw, 80px); }
+  .cta-actions { flex-direction: column; align-items: center; gap: 16px; }
+  .cta-actions .btn-main { width: 100%; max-width: 300px; text-align: center; }
+  .cta-bg { font-size: 180px; }
+
+  /* Footer */
+  footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px 20px; font-size: 10px; }
+
+  /* Warning */
+  .warning { font-size: 10px; padding: 12px 16px; }
+
+  /* Hide cursor on touch */
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* RESPONSIVE — SMALL PHONES */
+@media (max-width: 380px) {
+  .hero-title { font-size: 52px; }
+  .req-grid { grid-template-columns: 1fr; }
+  .hero-eyebrow { font-size: 9px; letter-spacing: 2px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">CYBER LAB</a>
+  <div class="nav-links">
+    <a href="#labs">LABS</a>
+    <a href="#stack">STACK</a>
+    <a href="#arch">ARCHITECTURE</a>
+    <a href="#requirements">REQUIREMENTS</a>
+    <a href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">GITHUB ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">FREE &nbsp;·&nbsp; OPEN SOURCE &nbsp;·&nbsp; BEGINNER TO INTERMEDIATE</div>
+    <h1 class="hero-title">
+      CYBER<br>
+      <span class="outline">LAB</span><br>
+      SERIES
+    </h1>
+    <p class="hero-desc">Build a professional-grade SOC on your own laptop. Simulate real attacks, detect them with industry-standard tools, triage with AI — the exact workflow real analysts use every day.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/rchencyber/sentinel-soc-lab/tree/main/labs/lab-01-environment-setup" target="_blank" class="btn-main">START LAB 01</a>
+      <a href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank" class="btn-ghost">GITHUB</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-line"></div>
+    <div class="hero-bg-text">SOC</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">13</div>
+        <div class="hero-stat-label">LABS</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">$0</div>
+        <div class="hero-stat-label">COST</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">10+</div>
+        <div class="hero-stat-label">TOOLS</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</div>
+
+<!-- WARNING -->
+<div class="warning">⚠ &nbsp; AUTHORIZED USE ONLY — Perform all activities exclusively within your own isolated virtual environment</div>
+
+<!-- ARCHITECTURE -->
+<div class="arch-section" id="arch">
+  <div class="arch-inner">
+    <div class="section-header reveal">
+      <div class="section-num">01</div>
+      <div class="section-title-group">
+        <div class="section-eyebrow">SYSTEM DESIGN</div>
+        <div class="section-title">ARCHITECTURE</div>
+      </div>
+      <div class="section-meta">FULL ATTACK CHAIN<br>ATTACKER → AI TRIAGE</div>
+    </div>
+    <div class="arch-flow">
+      <div class="arch-row reveal">
+        <div class="arch-index">01</div>
+        <div class="arch-info">
+          <div class="arch-name">KALI LINUX 2026.1</div>
+          <div class="arch-detail">192.168.100.20 &nbsp;·&nbsp; Launches Nmap, Metasploit, Hydra &nbsp;·&nbsp; Your attacker machine</div>
+        </div>
+        <div class="arch-badge badge-attack">ATTACKER</div>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-index">02</div>
+        <div class="arch-info">
+          <div class="arch-name">UBUNTU SERVER 22.04</div>
+          <div class="arch-detail">192.168.100.10 &nbsp;·&nbsp; Receives all attacks, hosts SIEM &nbsp;·&nbsp; Your victim machine</div>
+        </div>
+        <div class="arch-badge badge-victim">VICTIM / SIEM</div>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-index">03</div>
+        <div class="arch-info">
+          <div class="arch-name">METASPLOITABLE 2</div>
+          <div class="arch-detail">192.168.100.30 &nbsp;·&nbsp; Intentionally vulnerable &nbsp;·&nbsp; Safe to exploit, designed for it</div>
+        </div>
+        <div class="arch-badge badge-target">EXPLOIT TARGET</div>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-index">04</div>
+        <div class="arch-info">
+          <div class="arch-name">WAZUH SIEM + SURICATA IDS</div>
+          <div class="arch-detail">Collects logs from all machines &nbsp;·&nbsp; Fires alerts on suspicious activity &nbsp;·&nbsp; Monitors network traffic</div>
+        </div>
+        <div class="arch-badge badge-detect">DETECTION</div>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-index">05</div>
+        <div class="arch-info">
+          <div class="arch-name">AI TRIAGE DASHBOARD</div>
+          <div class="arch-detail">React + Claude API &nbsp;·&nbsp; Classifies threats &nbsp;·&nbsp; Maps MITRE ATT&CK &nbsp;·&nbsp; Generates incident reports</div>
+        </div>
+        <div class="arch-badge badge-ai">AI LAYER</div>
+      </div>
+      <div class="arch-row reveal">
+        <div class="arch-index">06</div>
+        <div class="arch-info">
+          <div class="arch-name">ELASTIC SIEM + KIBANA</div>
+          <div class="arch-detail">Added in Lab 07 &nbsp;·&nbsp; Enterprise log visualization &nbsp;·&nbsp; Custom dashboards &nbsp;·&nbsp; KQL queries</div>
+        </div>
+        <div class="arch-badge badge-enterprise">LAB 07+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LABS -->
+<div class="labs-section" id="labs">
+  <div class="labs-header reveal">
+    <div class="section-header" style="border:none;margin:0;padding:0">
+      <div class="section-num">02</div>
+      <div class="section-title-group">
+        <div class="section-eyebrow">THE CURRICULUM</div>
+        <div class="section-title">ALL 13 LABS</div>
+      </div>
+      <div class="section-meta">COMPLETE IN ORDER<br>EACH BUILDS ON THE LAST</div>
+    </div>
+  </div>
+  <div class="labs-strip">
+    <a class="lab-row complete" href="https://github.com/rchencyber/sentinel-soc-lab/tree/main/labs/lab-01-environment-setup" target="_blank">
+      <div class="lab-row-num">01</div>
+      <div class="lab-row-title">ENVIRONMENT SETUP</div>
+      <div class="lab-row-desc">Install VirtualBox, configure Kali + Ubuntu VMs, set up isolated soclab network, verify bidirectional connectivity.</div>
+      <div class="lab-row-status s-done">✓ COMPLETE</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">02</div>
+      <div class="lab-row-title">ADD METASPLOITABLE 2</div>
+      <div class="lab-row-desc">Import vulnerable target VM, assign static IP, verify all 3 machines communicate on the soclab network.</div>
+      <div class="lab-row-status s-next">▶ NEXT</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">03</div>
+      <div class="lab-row-title">INSTALL WAZUH SIEM</div>
+      <div class="lab-row-desc">Deploy Wazuh server on Ubuntu, install agents, verify log ingestion and dashboard access from host.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">04</div>
+      <div class="lab-row-title">INSTALL SURICATA IDS</div>
+      <div class="lab-row-desc">Deploy Suricata on Ubuntu, configure detection rules, test traffic monitoring with a basic network scan.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">05</div>
+      <div class="lab-row-title">NETWORK RECONNAISSANCE</div>
+      <div class="lab-row-desc">Run Nmap scans from Kali against Metasploitable. Watch Wazuh and Suricata fire alerts in real time.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">06</div>
+      <div class="lab-row-title">VULNERABILITY SCANNING</div>
+      <div class="lab-row-desc">Run OpenVAS against Metasploitable, score CVEs with CVSS, document findings in a formal incident report.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">07</div>
+      <div class="lab-row-title">ELASTIC SIEM + KIBANA</div>
+      <div class="lab-row-desc">Install Elastic Stack, forward Wazuh logs, build custom Kibana dashboards and write KQL detection queries.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">08</div>
+      <div class="lab-row-title">BRUTE FORCE ATTACK</div>
+      <div class="lab-row-desc">Launch SSH brute force from Kali using Hydra. Watch Wazuh detect and alert every attempt in real time.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">09</div>
+      <div class="lab-row-title">METASPLOIT EXPLOITATION</div>
+      <div class="lab-row-desc">Exploit a known CVE on Metasploitable, get a reverse shell, observe the full kill chain in your SIEM.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">10</div>
+      <div class="lab-row-title">PACKET ANALYSIS</div>
+      <div class="lab-row-desc">Capture live attack traffic with Wireshark, identify indicators of compromise, write analyst-style findings.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">11</div>
+      <div class="lab-row-title">AI TRIAGE INTEGRATION</div>
+      <div class="lab-row-desc">Connect Wazuh alerts to the AI triage dashboard. Claude API classifies threats and maps to MITRE ATT&CK.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">12</div>
+      <div class="lab-row-title">INCIDENT RESPONSE REPORT</div>
+      <div class="lab-row-desc">Write a complete IR report for a simulated attack using professional SOC documentation standards.</div>
+      <div class="lab-row-status s-soon">UPCOMING</div>
+    </a>
+    <a class="lab-row" href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">
+      <div class="lab-row-num">13</div>
+      <div class="lab-row-title">FULL KILL CHAIN CAPSTONE</div>
+      <div class="lab-row-desc">End-to-end: recon → exploit → detect → AI triage → incident report. Full stack, every tool, one scenario.</div>
+      <div class="lab-row-status s-cap">CAPSTONE</div>
+    </a>
+  </div>
+</div>
+
+<!-- STACK -->
+<div style="padding: clamp(60px,8vw,120px) clamp(20px,4vw,48px); max-width:1400px; margin: 0 auto;" id="stack">
+  <div class="section-header reveal">
+    <div class="section-num">03</div>
+    <div class="section-title-group">
+      <div class="section-eyebrow">TECHNOLOGY</div>
+      <div class="section-title">THE STACK</div>
+    </div>
+    <div class="section-meta">100% FREE<br>INDUSTRY STANDARD</div>
+  </div>
+  <div class="stack-grid reveal">
+    <div class="stack-item"><div class="stack-icon">📦</div><div class="stack-cat">HYPERVISOR</div><div class="stack-name">VIRTUALBOX</div><div class="stack-desc">Runs all VMs on your laptop inside a fully isolated private network.</div></div>
+    <div class="stack-item"><div class="stack-icon">🐉</div><div class="stack-cat">ATTACKER OS</div><div class="stack-name">KALI LINUX</div><div class="stack-desc">Industry standard for penetration testing. Used by security professionals worldwide.</div></div>
+    <div class="stack-item"><div class="stack-icon">🛡</div><div class="stack-cat">SIEM</div><div class="stack-name">WAZUH</div><div class="stack-desc">Open source SIEM used in real corporate SOCs. Collects and correlates all logs.</div></div>
+    <div class="stack-item"><div class="stack-icon">🔍</div><div class="stack-cat">IDS</div><div class="stack-name">SURICATA</div><div class="stack-desc">Network intrusion detection. Watches traffic for attack signatures in real time.</div></div>
+    <div class="stack-item"><div class="stack-icon">📊</div><div class="stack-cat">ENTERPRISE SIEM</div><div class="stack-name">ELASTIC + KIBANA</div><div class="stack-desc">Enterprise log visualization. Dashboards, KQL queries, event correlation.</div></div>
+    <div class="stack-item"><div class="stack-icon">⚔</div><div class="stack-cat">EXPLOITATION</div><div class="stack-name">METASPLOIT</div><div class="stack-desc">Standard exploitation framework used in professional penetration tests worldwide.</div></div>
+    <div class="stack-item"><div class="stack-icon">🗺</div><div class="stack-cat">SCANNING</div><div class="stack-name">NMAP</div><div class="stack-desc">Standard network scanner. Used in every IT and security role on the planet.</div></div>
+    <div class="stack-item"><div class="stack-icon">🦈</div><div class="stack-cat">PACKET ANALYSIS</div><div class="stack-name">WIRESHARK</div><div class="stack-desc">Universal packet capture tool. Essential for network forensics and traffic analysis.</div></div>
+    <div class="stack-item"><div class="stack-icon">🔎</div><div class="stack-cat">VULN SCANNING</div><div class="stack-name">OPENVAS</div><div class="stack-desc">Free vulnerability scanner. Identifies and CVSS-scores CVEs against your targets.</div></div>
+    <div class="stack-item"><div class="stack-icon">🤖</div><div class="stack-cat">AI TRIAGE</div><div class="stack-name">CLAUDE API</div><div class="stack-desc">React dashboard + Claude API. Classifies threats, maps MITRE ATT&CK, generates reports.</div></div>
+  </div>
+</div>
+
+<!-- REQUIREMENTS -->
+<div style="background: var(--panel); border-top:1px solid rgba(245,242,238,0.06); border-bottom:1px solid rgba(245,242,238,0.06);" id="requirements">
+  <div style="max-width:1400px; margin:0 auto; padding: clamp(60px,8vw,120px) clamp(20px,4vw,48px);">
+    <div class="section-header reveal">
+      <div class="section-num">04</div>
+      <div class="section-title-group">
+        <div class="section-eyebrow">HARDWARE</div>
+        <div class="section-title">REQUIREMENTS</div>
+      </div>
+      <div class="section-meta">ONE LAPTOP<br>NO CLOUD NEEDED</div>
+    </div>
+    <div class="req-grid reveal">
+      <div class="req-item"><div class="req-label">RAM</div><div class="req-val">16<span>GB</span></div><div class="req-note">Minimum. 32 GB ideal for Elastic Stack in later labs.</div></div>
+      <div class="req-item"><div class="req-label">STORAGE</div><div class="req-val">100<span>GB</span></div><div class="req-note">Free space required. 250 GB+ recommended for VM snapshots.</div></div>
+      <div class="req-item"><div class="req-label">CPU</div><div class="req-val">4<span>CORE</span></div><div class="req-note">Intel or AMD. 6+ cores preferred for running multiple VMs simultaneously.</div></div>
+      <div class="req-item"><div class="req-label">OS</div><div class="req-val">WIN<span>10/11</span></div><div class="req-note">Windows 10 or 11. macOS works with minor compatibility quirks.</div></div>
+      <div class="req-item"><div class="req-label">COST</div><div class="req-val">$<span>0</span></div><div class="req-note">Every single tool in this lab is free and open source. No paywalls.</div></div>
+      <div class="req-item"><div class="req-label">EXPERIENCE</div><div class="req-val">ANY<span>LEVEL</span></div><div class="req-note">No prior security experience required. Start from zero, build to analyst-ready.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMAT -->
+<div style="max-width:1400px; margin:0 auto; padding: clamp(60px,8vw,120px) clamp(20px,4vw,48px);">
+  <div class="section-header reveal">
+    <div class="section-num">05</div>
+    <div class="section-title-group">
+      <div class="section-eyebrow">LAB STRUCTURE</div>
+      <div class="section-title">WHAT'S INSIDE</div>
+    </div>
+    <div class="section-meta">EVERY LAB<br>SAME FORMAT</div>
+  </div>
+  <div class="format-grid reveal">
+    <div class="format-item"><div class="format-num">01</div><div class="format-text"><div class="format-title">OBJECTIVES</div><div class="format-desc">Exactly what skills you demonstrate. Mapped to real SOC analyst job requirements.</div></div></div>
+    <div class="format-item"><div class="format-num">02</div><div class="format-text"><div class="format-title">PREREQUISITES</div><div class="format-desc">What must be set up before starting. Nothing assumed, nothing skipped.</div></div></div>
+    <div class="format-item"><div class="format-num">03</div><div class="format-text"><div class="format-title">STEP-BY-STEP INSTRUCTIONS</div><div class="format-desc">Every command with expected output so you know immediately if something's wrong.</div></div></div>
+    <div class="format-item"><div class="format-num">04</div><div class="format-text"><div class="format-title">AI TRIAGE EXERCISE</div><div class="format-desc">Prompt-based exercise connecting each lab's output to the AI triage dashboard.</div></div></div>
+    <div class="format-item"><div class="format-num">05</div><div class="format-text"><div class="format-title">REVIEW QUESTIONS</div><div class="format-desc">5 questions that mirror real SOC analyst interview topics for this skill area.</div></div></div>
+    <div class="format-item"><div class="format-num">06</div><div class="format-text"><div class="format-title">INCIDENT REPORT TEMPLATE</div><div class="format-desc">Professional SOC documentation template — fill in your findings from the lab.</div></div></div>
+    <div class="format-item"><div class="format-num">07</div><div class="format-text"><div class="format-title">MITRE ATT&CK MAPPING</div><div class="format-desc">Every lab maps to real MITRE ATT&CK techniques used by actual threat actors.</div></div></div>
+    <div class="format-item"><div class="format-num">08</div><div class="format-text"><div class="format-title">GITHUB + LINKEDIN CHECKLIST</div><div class="format-desc">Exactly what to push to your repo and post on LinkedIn after each lab is complete.</div></div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-bg">GO</div>
+  <div class="cta-eyebrow">GET STARTED</div>
+  <div class="cta-title">LAB 01<br>IS LIVE</div>
+  <div class="cta-actions">
+    <a href="https://github.com/rchencyber/sentinel-soc-lab/tree/main/labs/lab-01-environment-setup" target="_blank" class="btn-main">START NOW</a>
+    <a href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank" class="btn-ghost">VIEW REPO</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>CYBER LAB SERIES &nbsp;·&nbsp; COMMUNITY EDITION &nbsp;·&nbsp; FREE TO SHARE</div>
+  <div><a href="https://github.com/rchencyber/sentinel-soc-lab" target="_blank">github.com/rchencyber/sentinel-soc-lab</a></div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  rx += (mx - rx) * 0.15;
+  ry += (my - ry) * 0.15;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('up'), e.target.dataset.delay || 0);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal, .reveal-left').forEach((el, i) => observer.observe(el));
+
+// Lab rows staggered reveal
+const labRows = document.querySelectorAll('.lab-row');
+const labObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = [...labRows].indexOf(e.target);
+      setTimeout(() => {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateX(0)';
+      }, idx * 40);
+    }
+  });
+}, { threshold: 0.05 });
+
+labRows.forEach(row => {
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(-20px)';
+  row.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background 0.3s, border-color 0.3s';
+  labObs.observe(row);
+});
+</script>
+</body>
+</html>
